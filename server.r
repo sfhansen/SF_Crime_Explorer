@@ -109,17 +109,16 @@ function(input, output) {
       v$click1 = input$map_click
       v$click1_radius = input$radius
       click1 =  v$click1
-      clat1 = click1$lat
-      clng1 = click1$lng
-      address = revgeocode(c(clng1,clat1))
-      
+      circle_lat1 = click1$lat
+      circle_long1 = click1$lng
+      circle_address = revgeocode(c(circle_long1,circle_lat1))
       
       # Adds first circle to map
       leafletProxy('map') %>% 
-        addCircles(lng = clng1, lat = clat1, group = 'circles',
+        addCircles(lng = circle_long1, lat = circle_lat1, group = 'circles',
                    weight = 1, radius = input$radius * MILE_TO_METER, 
                    color = 'black', fillColor = 'gray',
-                   popup = address, fillOpacity = 0.5, opacity = 1) 
+                   popup = circle_address, fillOpacity = 0.5, opacity = 1) 
       
       # Gets 2nd map click
     } else if(is.null(v$click2)) {
@@ -131,38 +130,37 @@ function(input, output) {
       # Gets click 1 and 2 radii and coordinates 
       click1_radius = v$click1_radius
       click2_radius = v$click2_radius
-      clat1 = click1$lat
-      clng1 = click1$lng
-      clat2 = click2$lat
-      clng2 = click2$lng
-      address = revgeocode(c(clng2,clat2))
-      
+      circle_lat1 = click1$lat
+      circle_long1 = click1$lng
+      circle_lat2 = click2$lat
+      circle_long2 = click2$lng
+      circle_address = revgeocode(c(circle_long2,circle_lat2))
       
       # If circle 1 is smaller: compute max/min coordinates from circle 1's center
       if(click1_radius <= click2_radius) {
-        max_lat <- clat1  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        min_lat <- clat1  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        max_lng <- clng1  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        min_lng <- clng1  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        max_lat <- circle_lat1  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        min_lat <- circle_lat1  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        max_lng <- circle_long1  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        min_lng <- circle_long1  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
         
-        smaller_circle_lat <- clat1
-        smaller_circle_lng <- clng1
-        larger_circle_lat <- clat2
-        larger_circle_lng <- clng2
+        smaller_circle_lat <- circle_lat1
+        smaller_circle_lng <- circle_long1
+        larger_circle_lat <- circle_lat2
+        larger_circle_lng <- circle_long2
         smaller_radius <- click1_radius
         larger_radius <- click2_radius
         
         # If circle 2 is smaller: compute max/min coordinates from circle 2's center
       } else {
-        max_lat <- clat2  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        min_lat <- clat2  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        max_lng <- clng2  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
-        min_lng <- clng2  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        max_lat <- circle_lat2  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        min_lat <- circle_lat2  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        max_lng <- circle_long2  + (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
+        min_lng <- circle_long2  - (click1_radius * MILE_TO_METER / EARTH_RADIUS) * (180 / pi)
         
-        smaller_circle_lat <- clat2
-        smaller_circle_lng <- clng2
-        larger_circle_lat <- clat1
-        larger_circle_lng <- clng1
+        smaller_circle_lat <- circle_lat2
+        smaller_circle_lng <- circle_long2
+        larger_circle_lat <- circle_lat1
+        larger_circle_lng <- circle_long1
         smaller_radius <- click2_radius
         larger_radius <- click1_radius
       }
@@ -240,10 +238,10 @@ function(input, output) {
       
       # Adds second circle to map
       leafletProxy('map') %>% 
-        addCircles(lng = clng2, lat = clat2, group = 'circles',
+        addCircles(lng = circle_long2, lat = circle_lat2, group = 'circles',
                    weight = 1, radius = input$radius * MILE_TO_METER, 
                    color = 'black', fillColor = 'gray',
-                   popup = address, fillOpacity = 0.5, opacity = 1) %>% 
+                   popup = circle_address, fillOpacity = 0.5, opacity = 1) %>% 
         
         # Adds crime markers to map
         addMarkers(data = crimes_in_range, 
