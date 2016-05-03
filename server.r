@@ -111,13 +111,15 @@ function(input, output) {
       click1 =  v$click1
       clat1 = click1$lat
       clng1 = click1$lng
+      address = revgeocode(c(clng1,clat1))
+      
       
       # Adds first circle to map
       leafletProxy('map') %>% 
         addCircles(lng = clng1, lat = clat1, group = 'circles',
                    weight = 1, radius = input$radius * MILE_TO_METER, 
                    color = 'black', fillColor = 'gray',
-                   popup = FALSE, fillOpacity = 0.5, opacity = 1) 
+                   popup = address, fillOpacity = 0.5, opacity = 1) 
       
       # Gets 2nd map click
     } else if(is.null(v$click2)) {
@@ -133,6 +135,8 @@ function(input, output) {
       clng1 = click1$lng
       clat2 = click2$lat
       clng2 = click2$lng
+      address = revgeocode(c(clng2,clat2))
+      
       
       # If circle 1 is smaller: compute max/min coordinates from circle 1's center
       if(click1_radius <= click2_radius) {
@@ -239,7 +243,7 @@ function(input, output) {
         addCircles(lng = clng2, lat = clat2, group = 'circles',
                    weight = 1, radius = input$radius * MILE_TO_METER, 
                    color = 'black', fillColor = 'gray',
-                   popup = FALSE, fillOpacity = 0.5, opacity = 1) %>% 
+                   popup = address, fillOpacity = 0.5, opacity = 1) %>% 
         
         # Adds crime markers to map
         addMarkers(data = crimes_in_range, 
