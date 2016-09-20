@@ -1,6 +1,4 @@
-<snippet>
-  <content><![CDATA[
-# ${1:SF Crime Explorer}
+#SF Crime Explorer
 
 ## Introduction
 
@@ -25,7 +23,3 @@ Once application is running, click the map in two location to display the crimes
 ## Credits
 
 Authors: Samuel Hansen and Shirbi Ish-Shalom
-
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>
